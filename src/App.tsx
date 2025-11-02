@@ -1,6 +1,7 @@
 // src/App.tsx
 import React, { useState } from "react";
 import CardStack from "./components/CardStack";
+import PlayArea from "./components/PlayArea";
 import Counter from "./components/Counter";
 import Instructions from "./components/Instructions";
 
@@ -9,9 +10,9 @@ const App: React.FC = () => {
     const [showInstructions, setShowInstructions] = useState(false);
 
     return (
-        <div className="p-6 flex flex-col min-h-screen bg-red-100 text-black relative">
+        <div className="p-6 flex flex-col min-h-screen bg-felt text-white relative">
             {/* Title in top left */}
-            <h1 className="absolute top-2 left-4 text-xl font-bold text-black/30 select-none pointer-events-none">13</h1>
+            <h1 className="absolute top-2 left-4 text-xl font-bold text-white/70 select-none pointer-events-none">13</h1>
 
             {/* Question mark icon in top right */}
             <button
@@ -34,11 +35,15 @@ const App: React.FC = () => {
 
             {/* Main app content, blurred if instructions are open */}
             <div className={`flex flex-col flex-1 ${showInstructions ? "blur-sm pointer-events-none select-none" : ""}`}>
-                <div className="flex justify-center">
+                <div className="flex justify-center -mt-3">
                     <Counter value={counterValue} />
                 </div>
-                <div className="flex flex-1 flex-col justify-end items-center mb-20">
-                    <CardStack setCounterValue={setCounterValue} />
+                <div className="flex flex-1 flex-col justify-end items-center w-full">
+                    <PlayArea>
+                        <div className="-translate-y-2">
+                            <CardStack setCounterValue={setCounterValue} />
+                        </div>
+                    </PlayArea>
                 </div>
             </div>
         </div>
