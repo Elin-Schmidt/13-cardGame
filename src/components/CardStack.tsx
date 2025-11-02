@@ -43,7 +43,7 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue }) => {
 
     return (
         <div className="flex flex-col gap-4 items-center">
-            <div className="relative h-48 w-32">
+            <div className="relative h-40 w-28 sm:h-48 sm:w-32 md:h-56 md:w-40">
                 {/* Stack av kort som inte är vända */}
                 {deck.map((_, index) => (
                     <div
@@ -70,7 +70,7 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue }) => {
                         className="absolute left-1/2 -translate-x-1/2 transition-transform duration-500 ease-out"
                         style={{
                             bottom: '100%',
-                            marginBottom: `48px`, // same baseline for all drawn cards (no stacking offset)
+                            marginBottom: `64px`, // lift drawn cards higher above the stack
                             zIndex: deck.length + 10 + i,
                             transform: `translateX(-50%) rotate(${card.angle}deg)`
                         }}
