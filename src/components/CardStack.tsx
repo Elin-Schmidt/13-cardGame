@@ -1,50 +1,44 @@
-import React, { useState } from "react";
-import { createDeck, type Card as CardType } from "../utils/deck";
+import React, { useState, useEffect } from "react";
 import Card from "./Card";
-
-const MAX_RANK = 13;
+import { createDeck } from "../utils/deck";
+import type { Card as CardType } from "../utils/deck";
 
 const CardStack: React.FC = () => {
-  const [deck, setDeck] = useState<CardType[]>(createDeck());
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [counter, setCounter] = useState(1);
-  const [flipped, setFlipped] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
+    const [cards, setCards] = useState<(CardType & { id: number })[]>([]);
+    const [flippedCards, setFlippedCards] = useState<number[]>([]);
 
-  const handleClick = () => {
-    if (gameOver || flipped) return;
+    useEffect(() => {
+        const deck = createDeck().map((card, index) => ({
+            ...card,
+            id: index,
+        }));
+        setCards(deck);
+    }, []);
 
-    setFlipped(true);
+    const handleFlip = (id: number) => {
+        if (flippedCards.includes(id)) return;
+        setFlippedCards([...flippedCards, id]);
+    };
 
-    setTimeout(() => {
-      const currentCard = deck[currentIndex];
-
-      if (currentCard.rank === counter) {
-        const newDeck = [...deck.slice(currentIndex + 1), ...deck.slice(0, currentIndex + 1)];
-        setDeck(newDeck);
-        setCurrentIndex(0);
-      } else {
-        if (currentIndex + 1 >= deck.length) {
-          setGameOver(true);
-        } else {
-          setCurrentIndex(currentIndex + 1);
-        }
-      }
-
-      setCounter((counter % MAX_RANK) + 1);
-      setFlipped(false);
-    }, 600); // väntar på flip-animationen
-  };
-
-  const topCard = deck[currentIndex];
-
-  return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h2>Räknare: {counter}</h2>
-      <Card card={topCard} flipped={flipped} onClick={handleClick} />
-      {gameOver && <h3>🎉 Du vann! Alla kort vända utan match 🎉</h3>}
-    </div>
-  );
+    return (
+        <div className="flex flex-col items-center gap-4 bg-white p-10 rounded-xl">
+            <div className="flex flex-wrap gap-2 max-w-4xl justify-center">
+                {cards.map((card) => (
+                    <div
+                        key={card.id}
+                        className="relative"
+                    >
+                        <Card
+                            card={card}
+                            isFlipped={flippedCards.includes(card.id)}
+                            onClick={() => handleFlip(card.id)}
+                            backColor="bg-blue-700"
+                        />
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 };
 
 export default CardStack;

@@ -1,75 +1,73 @@
-// src/components/Card.tsx
 import React from "react";
-import { motion } from "framer-motion";
-import { type Card as CardType } from "../utils/deck";
+import type { Card as CardType } from "../utils/deck";
 
-interface Props {
-  card: CardType;
-  flipped: boolean;
-  onClick: () => void;
+interface CardProps {
+    isFlipped: boolean;
+    onClick: () => void;
+    frontColor?: string;
+    backColor?: string;
+    card: CardType;
 }
 
-const Card: React.FC<Props> = ({ card, flipped, onClick }) => {
-  return (
-    <motion.div
-      onClick={onClick}
-      style={{
-        width: "100px",
-        height: "150px",
-        perspective: 1000,
-        cursor: "pointer",
-      }}
-    >
-      <motion.div
-        animate={{ rotateY: flipped ? 180 : 0 }}
-        transition={{ duration: 0.5 }}
-        style={{
-          width: "100%",
-          height: "100%",
-          position: "relative",
-        }}
-      >
-        {/* Baksidan */}
+const Card: React.FC<CardProps> = ({
+    isFlipped,
+    onClick,
+    backColor = "bg-blue-700",
+    card,
+}) => {
+    const getSuitSymbol = (suit: CardType["suit"]) => {
+        switch (suit) {
+            case "hearts": return "♥";
+            case "diamonds": return "♦";
+            case "clubs": return "♣";
+            case "spades": return "♠";
+        }
+    };
+    return (
         <div
-          style={{
-            backfaceVisibility: "hidden",
-            backgroundColor: "blue",
-            color: "white",
-            width: "100%",
-            height: "100%",
-            position: "absolute",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "24px",
-            borderRadius: "8px",
-          }}
+            className="relative w-32 h-48 cursor-pointer"
+            style={{ perspective: "1000px" }}
+            onClick={onClick}
         >
-          Kort
-        </div>
+            <div
+                className={`absolute w-full h-full transition-transform duration-500 ease-in-out`}
+                style={{
+                    transformStyle: "preserve-3d",
+                    transform: isFlipped ? "rotateY(180deg)" : ""
+                }}
+            >
+                {/* Baksida */}
+                <div
+                    className={`absolute w-full h-full ${backColor} rounded-xl shadow-lg flex items-center justify-center text-white text-lg`}
+                    style={{ backfaceVisibility: "hidden" }}
+                >
+                    🂠
+                </div>
 
-        {/* Framsidan */}
-        <div
-          style={{
-            backfaceVisibility: "hidden",
-            backgroundColor: "white",
-            color: "black",
-            width: "100%",
-            height: "100%",
-            position: "absolute",
-            transform: "rotateY(180deg)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "20px",
-            borderRadius: "8px",
-          }}
-        >
-          {card.rank} {card.suit}
+                {/* Framsida */}
+                <div
+                    className={`absolute w-full h-full ${card.suit === "hearts" || card.suit === "diamonds"
+                            ? "bg-white text-red-600"
+                            : "bg-white text-black"
+                        } rounded-xl shadow-lg flex flex-col items-center justify-between p-2`}
+                    style={{
+                        transform: "rotateY(180deg)",
+                        backfaceVisibility: "hidden"
+                    }}
+                >
+                    <div className="self-start text-xl">{getSuitSymbol(card.suit)}</div>
+                    <div className="text-3xl font-bold">
+                        {card.rank === 1 ? 'A' :
+                            card.rank === 11 ? 'J' :
+                                card.rank === 12 ? 'Q' :
+                                    card.rank === 13 ? 'K' :
+                                        card.rank}
+                    </div>
+                    <div className="self-end text-xl rotate-180">{getSuitSymbol(card.suit)}</div>
+                </div>
+            </div>
         </div>
-      </motion.div>
-    </motion.div>
-  );
+    );
 };
 
 export default Card;
