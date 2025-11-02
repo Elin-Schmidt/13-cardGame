@@ -1,5 +1,5 @@
 import React from "react";
-import cardBack from "../assets/classic.png";
+import cardBack from "../assets/backs/classic.png";
 import type { Card as CardType } from "../utils/deck";
 
 interface CardProps {
@@ -8,12 +8,14 @@ interface CardProps {
     frontColor?: string;
     backColor?: string;
     card: CardType;
+    backImage?: string;
 }
 
 const Card: React.FC<CardProps> = ({
     isFlipped,
     onClick,
     backColor = "bg-blue-700",
+    backImage,
     card,
 }) => {
     const getSuitSymbol = (suit: CardType["suit"]) => {
@@ -43,7 +45,7 @@ const Card: React.FC<CardProps> = ({
                     style={{ backfaceVisibility: "hidden" }}
                 >
                     <img
-                        src={cardBack}
+                        src={backImage ?? cardBack}
                         alt="Kortbaksida"
                         className="w-full h-full object-cover"
                         draggable={false}

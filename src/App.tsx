@@ -4,19 +4,24 @@ import CardStack from "./components/CardStack";
 import PlayArea from "./components/PlayArea";
 import Counter from "./components/Counter";
 import Instructions from "./components/Instructions";
+import BackSelector from "./components/BackSelector";
+import classic from "./assets/backs/classic.png";
 
 const App: React.FC = () => {
     const [counterValue, setCounterValue] = useState<string | number>("Start");
     const [showInstructions, setShowInstructions] = useState(false);
+    const [selectedBack, setSelectedBack] = useState<string>(classic);
 
     return (
         <div className="p-6 flex flex-col min-h-screen bg-felt text-white relative">
-            {/* Title in top left */}
-            <h1 className="absolute top-2 left-4 text-xl font-bold text-white/70 select-none pointer-events-none">13</h1>
+            {/* Logo in top-left (fixed to viewport) */}
+            <h1 className="fixed top-0 left-2 z-50 select-none pointer-events-none" aria-hidden="true">
+                <img src="/logo.svg" alt="Thirteen" className="h-20 w-auto" draggable={false} />
+            </h1>
 
             {/* Question mark icon in top right */}
             <button
-                className="absolute top-2 right-4 text-2xl font-bold text-black/40 hover:text-black/70 transition-colors z-20 bg-white/60 rounded-full w-9 h-9 flex items-center justify-center shadow-md backdrop-blur-sm"
+                className="fixed top-4 right-4 text-2xl font-bold text-black/40 hover:text-black/70 transition-colors z-50 bg-white/60 rounded-full w-9 h-9 flex items-center justify-center shadow-md backdrop-blur-sm"
                 onClick={() => setShowInstructions(true)}
                 aria-label="Visa instruktioner"
             >
@@ -36,13 +41,15 @@ const App: React.FC = () => {
             {/* Main app content, blurred if instructions are open */}
             <div className={`flex flex-col flex-1 ${showInstructions ? "blur-sm pointer-events-none select-none" : ""}`}>
                 <div className="flex justify-center -mt-3">
-                    <Counter value={counterValue} />
+                    <Counter value={counterValue} total={52} />
                 </div>
                 <div className="flex flex-1 flex-col justify-end items-center w-full">
                     <PlayArea>
                         <div className="-translate-y-2">
-                            <CardStack setCounterValue={setCounterValue} />
+                            <CardStack setCounterValue={setCounterValue} backImage={selectedBack} />
                         </div>
+                        {/* Back selector placed inside PlayArea so it's positioned relative to it */}
+                        <BackSelector selected={selectedBack} setSelected={setSelectedBack} />
                     </PlayArea>
                 </div>
             </div>

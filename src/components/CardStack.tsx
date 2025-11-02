@@ -5,9 +5,10 @@ import type { Card as CardType } from "../utils/deck";
 
 interface CardStackProps {
     setCounterValue: (val: string | number) => void;
+    backImage?: string;
 }
 
-const CardStack: React.FC<CardStackProps> = ({ setCounterValue }) => {
+const CardStack: React.FC<CardStackProps> = ({ setCounterValue, backImage }) => {
     const [deck, setDeck] = useState<(CardType & { id: number })[]>([]);
     // Each drawn card carries a random angle for a natural pile look
     const [drawnCards, setDrawnCards] = useState<(CardType & { id: number; angle: number })[]>([]);
@@ -63,10 +64,11 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue }) => {
             const TOTAL_PER_SUIT = 13;
             const TOTAL_CARDS = 52;
             const drawnCountAfter = TOTAL_CARDS - newDeck.length; // includes the just-drawn card
-            const counterAfter = drawnCountAfter === 0 ? "Start" : ((drawnCountAfter - 1) % TOTAL_PER_SUIT) + 1;
+            // matchCounter is the 1..13 value used when comparing against card ranks
+            const matchCounterAfter = drawnCountAfter === 0 ? "Start" : ((drawnCountAfter - 1) % TOTAL_PER_SUIT) + 1;
 
-            // if the drawn card's rank equals the counter after the draw, mark for return on next click
-            if (typeof counterAfter === "number" && drawnCard.rank === counterAfter) {
+            // if the drawn card's rank equals the match counter after the draw, mark for return on next click
+            if (typeof matchCounterAfter === "number" && drawnCard.rank === matchCounterAfter) {
                 // place the card on the table and set pendingReturn so the next click triggers the return animation
                 setDrawnCards(newDrawn);
                 setDeck(newDeck);
@@ -79,11 +81,10 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue }) => {
         }
     };
 
-    // Counter: "Start" om inget kort dragits, annars 1-13, loopar om
-    const TOTAL_PER_SUIT = 13;
+    // Counter: "Start" om inget kort dragits, annars antal utlagda kort (1..52)
     const TOTAL_CARDS = 52;
     const drawn = TOTAL_CARDS - deck.length;
-    const counterValue = drawn === 0 ? "Start" : ((drawn - 1) % TOTAL_PER_SUIT) + 1;
+    const counterValue = drawn === 0 ? "Start" : drawn;
     React.useEffect(() => {
         setCounterValue(counterValue);
     }, [counterValue, setCounterValue]);
@@ -106,6 +107,7 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue }) => {
                             isFlipped={false}
                             onClick={index === deck.length - 1 ? handleFlip : () => { }}
                             backColor="bg-blue-700"
+                            backImage={backImage}
                         />
                     </div>
                 ))}
@@ -136,6 +138,7 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue }) => {
                                 isFlipped={returnStage === 'idle'}
                                 onClick={() => { }}
                                 backColor="bg-blue-700"
+                                backImage={backImage}
                             />
                         </div>
                     );
