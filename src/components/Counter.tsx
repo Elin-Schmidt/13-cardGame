@@ -5,7 +5,7 @@ interface CounterProps {
 }
 
 const Counter: React.FC<CounterProps> = ({ value }) => (
-    <div className="mt-4 text-lg font-semibold text-gray-800">
+    <div className="mt-4 text-4xl font-extrabold text-gray-800 drop-shadow-sm">
         {value}
     </div>
 );

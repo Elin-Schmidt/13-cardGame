@@ -9,8 +9,8 @@ interface CardStackProps {
 
 const CardStack: React.FC<CardStackProps> = ({ setCounterValue }) => {
     const [deck, setDeck] = useState<(CardType & { id: number })[]>([]);
-    const [currentCard, setCurrentCard] = useState<(CardType & { id: number }) | null>(null);
-    const [isFlipped, setIsFlipped] = useState(false);
+    // Each drawn card carries a random angle for a natural pile look
+    const [drawnCards, setDrawnCards] = useState<(CardType & { id: number; angle: number })[]>([]);
 
     useEffect(() => {
         const newDeck = createDeck().map((card, index) => ({
@@ -21,14 +21,14 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue }) => {
     }, []);
 
     const handleFlip = () => {
-        if (!isFlipped && deck.length > 0) {
+        if (deck.length > 0) {
             const randomIndex = Math.floor(Math.random() * deck.length);
             const drawnCard = deck[randomIndex];
             const newDeck = deck.filter((_, index) => index !== randomIndex);
-
-            setCurrentCard(drawnCard);
+            // assign a small random rotation between -8 and +8 degrees
+            const angle = Math.random() * 16 - 8;
+            setDrawnCards(prev => [{ ...drawnCard, angle }, ...prev]);
             setDeck(newDeck);
-            setIsFlipped(true);
         }
     };
 
@@ -63,24 +63,26 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue }) => {
                     </div>
                 ))}
 
-                {/* Visar det aktiva kortet ovanför högen */}
-                {currentCard && (
+                {/* Visa alla dragna kort ovanför högen, senaste kortet överst (högst z-index) */}
+                {[...drawnCards].reverse().map((card, i) => (
                     <div
-                        className="absolute left-1/2 -translate-x-1/2"
+                        key={card.id}
+                        className="absolute left-1/2 -translate-x-1/2 transition-transform duration-500 ease-out"
                         style={{
                             bottom: '100%',
-                            marginBottom: '48px', // Större avstånd mellan högen och draget kort
-                            zIndex: deck.length + 10
+                            marginBottom: `48px`, // same baseline for all drawn cards (no stacking offset)
+                            zIndex: deck.length + 10 + i,
+                            transform: `translateX(-50%) rotate(${card.angle}deg)`
                         }}
                     >
                         <Card
-                            card={currentCard}
-                            isFlipped={isFlipped}
+                            card={card}
+                            isFlipped={true}
                             onClick={() => { }}
                             backColor="bg-blue-700"
                         />
                     </div>
-                )}
+                ))}
             </div>
         </div>
     );
