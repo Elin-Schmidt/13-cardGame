@@ -20,15 +20,62 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue }) => {
         setDeck(newDeck);
     }, []);
 
+    // (shuffle helper removed — not used currently)
+
+    const [pendingReturn, setPendingReturn] = useState(false);
+    const [returnStage, setReturnStage] = useState<'idle' | 'flip' | 'move'>('idle');
+
     const handleFlip = () => {
+        if (returnStage !== 'idle') return; // block draws while returning animation runs
+        if (pendingReturn) {
+            // user clicked to confirm return: start flip then move animation
+            const FLIP_MS = 350;
+            const MOVE_MS = 600;
+
+            setReturnStage('flip');
+            // after flip, start move
+            setTimeout(() => setReturnStage('move'), FLIP_MS);
+
+            // after flip+move, merge cards back into deck and clear
+            const cardsToReturn = drawnCards.map(card => ({ suit: card.suit, rank: card.rank, id: card.id } as CardType & { id: number }));
+            setTimeout(() => {
+                // put returned cards under the rest of the deck (append to end)
+                const mergedUnder = [...deck, ...cardsToReturn];
+                setDeck(mergedUnder);
+                setDrawnCards([]);
+                setReturnStage('idle');
+                setPendingReturn(false);
+            }, FLIP_MS + MOVE_MS);
+
+            return;
+        }
         if (deck.length > 0) {
             const randomIndex = Math.floor(Math.random() * deck.length);
             const drawnCard = deck[randomIndex];
             const newDeck = deck.filter((_, index) => index !== randomIndex);
             // assign a small random rotation between -8 and +8 degrees
             const angle = Math.random() * 16 - 8;
-            setDrawnCards(prev => [{ ...drawnCard, angle }, ...prev]);
-            setDeck(newDeck);
+
+            // prepare new drawn list (the newly drawn card sits on top)
+            const newDrawn = [{ ...drawnCard, angle }, ...drawnCards];
+
+            // compute what the counter would be after this draw
+            const TOTAL_PER_SUIT = 13;
+            const TOTAL_CARDS = 52;
+            const drawnCountAfter = TOTAL_CARDS - newDeck.length; // includes the just-drawn card
+            const counterAfter = drawnCountAfter === 0 ? "Start" : ((drawnCountAfter - 1) % TOTAL_PER_SUIT) + 1;
+
+            // if the drawn card's rank equals the counter after the draw, mark for return on next click
+            if (typeof counterAfter === "number" && drawnCard.rank === counterAfter) {
+                // place the card on the table and set pendingReturn so the next click triggers the return animation
+                setDrawnCards(newDrawn);
+                setDeck(newDeck);
+                setPendingReturn(true);
+            } else {
+                // normal case: place the card on the table
+                setDrawnCards(newDrawn);
+                setDeck(newDeck);
+            }
         }
     };
 
@@ -64,25 +111,35 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue }) => {
                 ))}
 
                 {/* Visa alla dragna kort ovanför högen, senaste kortet överst (högst z-index) */}
-                {[...drawnCards].reverse().map((card, i) => (
-                    <div
-                        key={card.id}
-                        className="absolute left-1/2 -translate-x-1/2 transition-transform duration-500 ease-out"
-                        style={{
-                            bottom: '100%',
-                            marginBottom: `64px`, // lift drawn cards higher above the stack
-                            zIndex: deck.length + 10 + i,
-                            transform: `translateX(-50%) rotate(${card.angle}deg)`
-                        }}
-                    >
-                        <Card
-                            card={card}
-                            isFlipped={true}
-                            onClick={() => { }}
-                            backColor="bg-blue-700"
-                        />
-                    </div>
-                ))}
+                {[...drawnCards].reverse().map((card, i) => {
+                    const baseTransform = `translateX(-50%) rotate(${card.angle}deg)`;
+                    const moveTransform = `translateX(-50%) translateY(80px) rotate(0deg) scale(0.75)`;
+                    const isMoving = returnStage === 'move';
+                    // When moving back under the deck we hide the cards (opacity:0)
+                    // so they don't visibly stick out under the deck during the animation.
+                    return (
+                        <div
+                            key={card.id}
+                            className="absolute left-1/2 -translate-x-1/2 transition-all duration-600 ease-out"
+                            style={{
+                                bottom: isMoving ? '0%' : '100%',
+                                marginBottom: isMoving ? `8px` : `64px`, // lift drawn cards higher above the stack normally, return to near deck when moving
+                                zIndex: isMoving ? 0 : deck.length + 10 + i,
+                                transform: isMoving ? moveTransform : baseTransform,
+                                opacity: isMoving ? 0 : 1,
+                                pointerEvents: isMoving ? 'none' : 'auto'
+                            }}
+                        >
+                            <Card
+                                card={card}
+                                // show front only when not returning; during flip/move show back
+                                isFlipped={returnStage === 'idle'}
+                                onClick={() => { }}
+                                backColor="bg-blue-700"
+                            />
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );
