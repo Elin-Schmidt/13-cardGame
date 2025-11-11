@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { createDeck, type Card } from "../utils/deck";
 import CardComponent from "./Card";
+import BackSelector from "./BackSelector";
 import classic from "../assets/backs/classic.png";
 
 interface TwoPlayerGameProps {
@@ -15,8 +16,22 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
     const [currentPlayer, setCurrentPlayer] = useState<1 | 2>(() => Math.random() < 0.5 ? 1 : 2);
     const [counterValue, setCounterValue] = useState<number | "Start" | "">("Start");
     const [winner, setWinner] = useState<1 | 2 | null>(null);
-    const [selectedBack] = useState<string>(classic);
+    const [player1Back, setPlayer1Back] = useState<string>(classic);
+    const [player2Back, setPlayer2Back] = useState<string>(classic);
     const [isMatched, setIsMatched] = useState<boolean>(false);
+    const [player1SelectorOpen, setPlayer1SelectorOpen] = useState<boolean>(false);
+    const [player2SelectorOpen, setPlayer2SelectorOpen] = useState<boolean>(false);
+
+    // Hantera att bara en modal kan vara öppen åt gången
+    const handlePlayer1SelectorChange = (open: boolean) => {
+        setPlayer1SelectorOpen(open);
+        if (open) setPlayer2SelectorOpen(false); // Stäng player 2's modal
+    };
+
+    const handlePlayer2SelectorChange = (open: boolean) => {
+        setPlayer2SelectorOpen(open);
+        if (open) setPlayer1SelectorOpen(false); // Stäng player 1's modal
+    };
 
     // Dela ut korten vid start
     useEffect(() => {
@@ -42,7 +57,8 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
 
         // Om det finns en match, samla in korten med animation
         if (isMatched) {
-            const cardsToCollect = middlePile.map(({ angle: _angle, ...card }) => card);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const cardsToCollect = middlePile.map(({ angle, ...card }) => card);
 
             // Animera borttagning av korten från mittenhögen
             setTimeout(() => {
@@ -121,7 +137,7 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
                         className="rounded-3xl bg-amber-900/10 p-2 shadow-lg"
                         style={{ backgroundImage: "linear-gradient(180deg, rgba(0,0,0,0.15), rgba(255,255,255,0.02))" }}
                     >
-                        <div className="rounded-2xl bg-felt p-3 flex flex-col items-center justify-center gap-2">
+                        <div className="rounded-2xl bg-felt p-3 flex flex-col items-center justify-center gap-2 relative">
                             <div
                                 className={`relative h-48 w-32 ${currentPlayer === 1 && !winner && player1Cards.length > 0 ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}
                                 onClick={currentPlayer === 1 && !winner && player1Cards.length > 0 ? () => playCard(1) : undefined}
@@ -141,7 +157,7 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
                                                 card={card}
                                                 isFlipped={false}
                                                 onClick={() => { }}
-                                                backImage={selectedBack}
+                                                backImage={player1Back}
                                             />
                                         </div>
                                     ))
@@ -154,6 +170,14 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
                             <div className="text-white/70 text-sm">
                                 Antal kort: {player1Cards.length}
                             </div>
+                            {/* BackSelector för spelare 1 */}
+                            <BackSelector
+                                selected={player1Back}
+                                setSelected={setPlayer1Back}
+                                playerPosition="top"
+                                isOpen={player1SelectorOpen}
+                                onOpenChange={handlePlayer1SelectorChange}
+                            />
                         </div>
                     </div>
                 </div>
@@ -186,7 +210,8 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
                                     card={card}
                                     isFlipped={true}
                                     onClick={() => { }}
-                                    backImage={selectedBack}
+                                    backImage={classic}
+                                    isThirteenthCard={(index + 1) % 13 === 0}
                                 />
                             </div>
                         ))
@@ -240,7 +265,7 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
                         className="rounded-3xl bg-amber-900/10 p-2 shadow-lg"
                         style={{ backgroundImage: "linear-gradient(180deg, rgba(0,0,0,0.15), rgba(255,255,255,0.02))" }}
                     >
-                        <div className="rounded-2xl bg-felt p-3 flex flex-col items-center justify-center gap-1">
+                        <div className="rounded-2xl bg-felt p-3 flex flex-col items-center justify-center gap-1 relative">
                             <div
                                 className={`relative h-48 w-32 ${currentPlayer === 2 && !winner && player2Cards.length > 0 ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}
                                 onClick={currentPlayer === 2 && !winner && player2Cards.length > 0 ? () => playCard(2) : undefined}
@@ -260,7 +285,7 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
                                                 card={card}
                                                 isFlipped={false}
                                                 onClick={() => { }}
-                                                backImage={selectedBack}
+                                                backImage={player2Back}
                                             />
                                         </div>
                                     ))
@@ -273,6 +298,14 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
                             <div className="text-white/70 text-sm">
                                 Antal kort: {player2Cards.length}
                             </div>
+                            {/* BackSelector för spelare 2 */}
+                            <BackSelector
+                                selected={player2Back}
+                                setSelected={setPlayer2Back}
+                                playerPosition="bottom"
+                                isOpen={player2SelectorOpen}
+                                onOpenChange={handlePlayer2SelectorChange}
+                            />
                         </div>
                     </div>
                 </div>

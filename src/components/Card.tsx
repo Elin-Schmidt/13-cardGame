@@ -9,6 +9,7 @@ interface CardProps {
     backColor?: string;
     card: CardType;
     backImage?: string;
+    isThirteenthCard?: boolean;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -17,6 +18,7 @@ const Card: React.FC<CardProps> = ({
     backColor = "bg-blue-700",
     backImage,
     card,
+    isThirteenthCard = false,
 }) => {
     const getSuitSymbol = (suit: CardType["suit"]) => {
         switch (suit) {
@@ -26,6 +28,7 @@ const Card: React.FC<CardProps> = ({
             case "spades": return "♠";
         }
     };
+
     return (
         <div
             className="relative w-32 h-48 cursor-pointer"
@@ -57,10 +60,17 @@ const Card: React.FC<CardProps> = ({
                     className={`absolute w-full h-full ${card.suit === "hearts" || card.suit === "diamonds"
                         ? "bg-white text-red-600"
                         : "bg-white text-black"
-                        } rounded-xl shadow-lg flex flex-col items-center justify-between p-2`}
+                        } rounded-xl shadow-lg flex flex-col items-center justify-between p-2 relative`}
                     style={{
                         transform: "rotateY(180deg)",
-                        backfaceVisibility: "hidden"
+                        backfaceVisibility: "hidden",
+                        ...(isThirteenthCard ? {
+                            border: "3px solid transparent",
+                            backgroundImage: `linear-gradient(white, white), linear-gradient(135deg, #FFC870, #F0A543, #B8860B, #F0A543, #FFC870)`,
+                            backgroundOrigin: "border-box",
+                            backgroundClip: "padding-box, border-box",
+                            boxShadow: "0 0 8px rgba(255, 200, 112, 0.5)"
+                        } : {})
                     }}
                 >
                     {/* Övre hörnet - rank och suit */}
