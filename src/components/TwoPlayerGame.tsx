@@ -249,7 +249,7 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
                         className={`absolute -top-20 z-40 transition-all duration-700 ease-out ${(counterValue === "Start" || counterValue === "")
                             ? 'left-1/2 -translate-x-1/2'
                             : 'left-4'
-                        }`}
+                            }`}
                     >
                         <span
                             className="text-4xl sm:text-7xl font-bold text-white/30 tabular-nums select-none"
