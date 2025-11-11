@@ -12,7 +12,7 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
     const [player1Cards, setPlayer1Cards] = useState<Card[]>([]);
     const [player2Cards, setPlayer2Cards] = useState<Card[]>([]);
     const [middlePile, setMiddlePile] = useState<(Card & { angle: number })[]>([]);
-    const [currentPlayer, setCurrentPlayer] = useState<1 | 2>(1);
+    const [currentPlayer, setCurrentPlayer] = useState<1 | 2>(() => Math.random() < 0.5 ? 1 : 2);
     const [counterValue, setCounterValue] = useState<number | "Start" | "">("Start");
     const [winner, setWinner] = useState<1 | 2 | null>(null);
     const [selectedBack] = useState<string>(classic);
@@ -47,9 +47,9 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
             // Animera borttagning av korten från mittenhögen
             setTimeout(() => {
                 if (player === 1) {
-                    setPlayer1Cards(prev => [...prev, ...cardsToCollect]);
+                    setPlayer1Cards(prev => [...cardsToCollect, ...prev]);
                 } else {
-                    setPlayer2Cards(prev => [...prev, ...cardsToCollect]);
+                    setPlayer2Cards(prev => [...cardsToCollect, ...prev]);
                 }
                 setMiddlePile([]);
                 setIsMatched(false);

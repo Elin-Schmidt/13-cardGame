@@ -63,18 +63,47 @@ const Card: React.FC<CardProps> = ({
                         backfaceVisibility: "hidden"
                     }}
                 >
-                    <div className="self-start text-4xl">{getSuitSymbol(card.suit)}</div>
+                    {/* Övre hörnet - rank och suit */}
+                    <div className="self-start flex flex-col items-center leading-tight">
+                        <div className="text-2xl font-bold">
+                            {card.rank === 1 ? 'A' :
+                                card.rank === 11 ? 'J' :
+                                    card.rank === 12 ? 'Q' :
+                                        card.rank === 13 ? 'K' :
+                                            (card.rank === 6 || card.rank === 9
+                                                ? <span className="underline decoration-2 underline-offset-2">{card.rank}</span>
+                                                : card.rank)
+                            }
+                        </div>
+                        <div className="text-2xl -mt-2.5">{getSuitSymbol(card.suit)}</div>
+                    </div>
+
+                    {/* Mitten - stor symbol */}
                     <div className="text-5xl font-bold">
                         {card.rank === 1 ? 'A' :
                             card.rank === 11 ? 'J' :
                                 card.rank === 12 ? 'Q' :
                                     card.rank === 13 ? 'K' :
                                         (card.rank === 6 || card.rank === 9
-                                            ? <span className="inline-block border-b-4 border-current pb-1">{card.rank}</span>
+                                            ? <span className="underline decoration-4 underline-offset-[6px]">{card.rank}</span>
                                             : card.rank)
                         }
                     </div>
-                    <div className="self-end text-4xl rotate-180">{getSuitSymbol(card.suit)}</div>
+
+                    {/* Nedre hörnet - rank och suit (upp och ner) */}
+                    <div className="self-end flex flex-col items-center leading-tight rotate-180">
+                        <div className="text-2xl font-bold">
+                            {card.rank === 1 ? 'A' :
+                                card.rank === 11 ? 'J' :
+                                    card.rank === 12 ? 'Q' :
+                                        card.rank === 13 ? 'K' :
+                                            (card.rank === 6 || card.rank === 9
+                                                ? <span className="underline decoration-2 underline-offset-2">{card.rank}</span>
+                                                : card.rank)
+                            }
+                        </div>
+                        <div className="text-2xl -mt-2.5">{getSuitSymbol(card.suit)}</div>
+                    </div>
                 </div>
             </div>
         </div>
