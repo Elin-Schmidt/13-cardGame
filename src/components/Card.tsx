@@ -1,5 +1,5 @@
 import React from "react";
-import cardBack from "../assets/classic.png";
+import cardBack from "../assets/backs/classic.png";
 import type { Card as CardType } from "../utils/deck";
 
 interface CardProps {
@@ -8,12 +8,14 @@ interface CardProps {
     frontColor?: string;
     backColor?: string;
     card: CardType;
+    backImage?: string;
 }
 
 const Card: React.FC<CardProps> = ({
     isFlipped,
     onClick,
     backColor = "bg-blue-700",
+    backImage,
     card,
 }) => {
     const getSuitSymbol = (suit: CardType["suit"]) => {
@@ -43,7 +45,7 @@ const Card: React.FC<CardProps> = ({
                     style={{ backfaceVisibility: "hidden" }}
                 >
                     <img
-                        src={cardBack}
+                        src={backImage ?? cardBack}
                         alt="Kortbaksida"
                         className="w-full h-full object-cover"
                         draggable={false}
@@ -61,8 +63,8 @@ const Card: React.FC<CardProps> = ({
                         backfaceVisibility: "hidden"
                     }}
                 >
-                    <div className="self-start text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">{getSuitSymbol(card.suit)}</div>
-                    <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold">
+                    <div className="self-start text-4xl">{getSuitSymbol(card.suit)}</div>
+                    <div className="text-5xl font-bold">
                         {card.rank === 1 ? 'A' :
                             card.rank === 11 ? 'J' :
                                 card.rank === 12 ? 'Q' :
@@ -72,7 +74,7 @@ const Card: React.FC<CardProps> = ({
                                             : card.rank)
                         }
                     </div>
-                    <div className="self-end text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl rotate-180">{getSuitSymbol(card.suit)}</div>
+                    <div className="self-end text-4xl rotate-180">{getSuitSymbol(card.suit)}</div>
                 </div>
             </div>
         </div>

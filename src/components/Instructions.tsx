@@ -16,7 +16,7 @@ const Instructions: React.FC<InstructionsProps> = ({ onClose }) => (
             >
                 &times;
             </button>
-            <h2 className="text-2xl font-bold mb-4 text-center">Hur spelar man 13?</h2>
+            <h2 className="text-2xl font-bold mb-4 text-center text-black">Hur spelar man 13?</h2>
             <ul className="list-disc pl-5 space-y-2 text-base text-gray-700">
                 <li>Klicka på kortleken för att dra ett kort.</li>
                 <li>Det dragna kortet läggs ovanpå högen.</li>
