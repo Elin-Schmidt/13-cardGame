@@ -6,9 +6,10 @@ import type { Card as CardType } from "../utils/deck";
 interface CardStackProps {
     setCounterValue: (val: string | number) => void;
     backImage?: string;
+    onVictory?: () => void;
 }
 
-const CardStack: React.FC<CardStackProps> = ({ setCounterValue, backImage }) => {
+const CardStack: React.FC<CardStackProps> = ({ setCounterValue, backImage, onVictory }) => {
     const [deck, setDeck] = useState<(CardType & { id: number })[]>([]);
     // Each drawn card carries a random angle for a natural pile look
     const [drawnCards, setDrawnCards] = useState<(CardType & { id: number; angle: number })[]>([]);
@@ -77,6 +78,14 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue, backImage }) => 
                 // normal case: place the card on the table
                 setDrawnCards(newDrawn);
                 setDeck(newDeck);
+
+                // Check if this was the last card and player won (didn't match)
+                if (newDeck.length === 0 && onVictory) {
+                    // Trigger victory after a short delay so the card animation completes
+                    setTimeout(() => {
+                        onVictory();
+                    }, 500);
+                }
             }
         }
     };

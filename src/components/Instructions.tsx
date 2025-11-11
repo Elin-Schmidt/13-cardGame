@@ -41,6 +41,7 @@ const Instructions: React.FC<InstructionsProps> = ({ onClose }) => (
                 <div>
                     <h3 className="font-bold text-lg mb-2 text-black">2 Spelare</h3>
                     <ul className="list-disc pl-5 space-y-1 text-base">
+                        <li>Spelas på samma enhet - spelarna sitter mitt emot varandra.</li>
                         <li>Korten delas lika mellan spelarna (26 var).</li>
                         <li>Turas om att lägga kort i mittenhögen.</li>
                         <li>Om kortet matchar räknaren - klicka för att samla alla kort i mitten!</li>

@@ -122,7 +122,7 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
                             }`}
                     >
                         <span
-                            className="text-4xl font-bold text-white/30 tabular-nums select-none"
+                            className="text-4xl sm:text-7xl font-bold text-white/30 tabular-nums select-none"
                             style={{
                                 fontFamily: 'monospace',
                                 fontWeight: 900,
@@ -243,26 +243,26 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
 
             {/* Spelare 2 - Nertill */}
             <div className="absolute bottom-0 left-0 right-0 flex justify-center">
-                {/* Counter för spelare 2 - precis ovanför PlayArea */}
-                <div
-                    className={`absolute -top-20 z-40 transition-all duration-700 ease-out ${(counterValue === "Start" || counterValue === "")
-                        ? 'left-1/2 -translate-x-1/2'
-                        : 'left-4'
-                        }`}
-                >
-                    <span
-                        className="text-4xl font-bold text-white/30 tabular-nums select-none"
-                        style={{
-                            fontFamily: 'monospace',
-                            fontWeight: 900,
-                            letterSpacing: '-0.05em'
-                        }}
-                    >
-                        {counterValue}
-                    </span>
-                </div>
-
                 <div className="relative w-full max-w-md mx-auto">
+                    {/* Counter för spelare 2 - precis ovanför PlayArea */}
+                    <div
+                        className={`absolute -top-20 z-40 transition-all duration-700 ease-out ${(counterValue === "Start" || counterValue === "")
+                            ? 'left-1/2 -translate-x-1/2'
+                            : 'left-4'
+                        }`}
+                    >
+                        <span
+                            className="text-4xl sm:text-7xl font-bold text-white/30 tabular-nums select-none"
+                            style={{
+                                fontFamily: 'monospace',
+                                fontWeight: 900,
+                                letterSpacing: '-0.05em'
+                            }}
+                        >
+                            {counterValue}
+                        </span>
+                    </div>
+
                     <div
                         className="rounded-3xl bg-amber-900/10 p-2 shadow-lg"
                         style={{ backgroundImage: "linear-gradient(180deg, rgba(0,0,0,0.15), rgba(255,255,255,0.02))" }}
