@@ -125,7 +125,7 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue, backImage }) => 
                             className="absolute left-1/2 -translate-x-1/2 transition-all duration-600 ease-out"
                             style={{
                                 bottom: isMoving ? '0%' : '100%',
-                                marginBottom: isMoving ? `8px` : `64px`, // lift drawn cards higher above the stack normally, return to near deck when moving
+                                marginBottom: isMoving ? `8px` : `68px`, // lift drawn cards higher above the stack normally, return to near deck when moving
                                 zIndex: isMoving ? 0 : deck.length + 10 + i,
                                 transform: isMoving ? moveTransform : baseTransform,
                                 opacity: isMoving ? 0 : 1,

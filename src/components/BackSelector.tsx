@@ -45,7 +45,7 @@ const BackSelector: React.FC<BackSelectorProps> = ({ selected, setSelected }) =>
 
             {open && (
                 <div className="fixed inset-0 flex items-center justify-center z-40" onClick={() => setOpen(false)}>
-                    <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 max-w-3xl w-full mx-4 max-h-[90vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
+                    <div className="bg-white rounded-xl shadow-lg p-4 max-w-3xl w-full mx-4 max-h-[80vh] overflow-auto" onClick={(e) => e.stopPropagation()}>
                         <button
                             className="absolute top-3 right-5 text-2xl text-gray-500 hover:text-black"
                             onClick={() => setOpen(false)}
@@ -55,7 +55,7 @@ const BackSelector: React.FC<BackSelectorProps> = ({ selected, setSelected }) =>
                         </button>
                         <p className="text-md text-gray-600 mb-4">Klicka på en design för att använda den som kortbaksida.</p>
 
-                        <div className="grid grid-cols-2 gap-3 overflow-auto max-h-[564px]">
+                        <div className="grid grid-cols-2 gap-2 overflow-auto max-h-[564px]">
                             {backs.map((b) => (
                                 <button
                                     key={b.name}
