@@ -91,7 +91,7 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue, backImage }) => 
 
     return (
         <div className="flex flex-col gap-4 items-center">
-            <div className="relative h-40 w-28 sm:h-48 sm:w-32 md:h-56 md:w-40">
+            <div className="relative h-40 w-28">
                 {/* Stack av kort som inte är vända */}
                 {deck.map((_, index) => (
                     <div
