@@ -167,8 +167,10 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
                                     </div>
                                 )}
                             </div>
-                            <div className="text-white/70 text-sm">
-                                Antal kort: {player1Cards.length}
+                            <div className="flex items-center gap-2 text-white/70 text-sm">
+                                <span className="font-semibold text-white/50">Spelare 1</span>
+                                <span>•</span>
+                                <span>Antal kort: {player1Cards.length}</span>
                             </div>
                             {/* BackSelector för spelare 1 */}
                             <BackSelector
@@ -295,8 +297,10 @@ const TwoPlayerGame: React.FC<TwoPlayerGameProps> = ({ onBackToMenu }) => {
                                     </div>
                                 )}
                             </div>
-                            <div className="text-white/70 text-sm">
-                                Antal kort: {player2Cards.length}
+                            <div className="flex items-center gap-2 text-white/70 text-sm">
+                                <span className="font-semibold text-white/50">Spelare 2</span>
+                                <span>•</span>
+                                <span>Antal kort: {player2Cards.length}</span>
                             </div>
                             {/* BackSelector för spelare 2 */}
                             <BackSelector
