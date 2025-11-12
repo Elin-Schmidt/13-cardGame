@@ -1,13 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
+import Instructions from "./Instructions";
 
 interface MenuProps {
     onSelectMode: (mode: '1-player' | '2-player') => void;
 }
 
 const Menu: React.FC<MenuProps> = ({ onSelectMode }) => {
+    const [showInstructions, setShowInstructions] = useState(false);
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen h-full bg-felt text-black p-6 relative">
-            <img src="/logo.svg" alt="Thirteen" className="h-64 w-auto mb-12" draggable={false} />
+            <img src="/logo.svg" alt="Thirteen" className="h-80 w-auto mb-12" draggable={false} />
+
+            {/* Question mark icon in top right */}
+            <div className="fixed top-4 right-4 z-[100]">
+                <button
+                    className={`text-3xl font-bold transition-colors rounded-full w-12 h-12 flex items-center justify-center shadow-md backdrop-blur-sm ${showInstructions
+                            ? 'text-white/60 bg-black/40 hover:text-white/70'
+                            : 'text-black/40 bg-white/60 hover:text-black/70'
+                        }`}
+                    onClick={() => setShowInstructions(!showInstructions)}
+                    aria-label="Visa instruktioner"
+                >
+                    ?
+                </button>
+            </div>
+
+            {/* Blur overlay when instructions are open */}
+            {showInstructions && (
+                <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-30" />
+            )}
+
+            {/* Instructions modal */}
+            {showInstructions && (
+                <Instructions onClose={() => setShowInstructions(false)} />
+            )}
 
             <div className="flex flex-row gap-6">
                 <button
