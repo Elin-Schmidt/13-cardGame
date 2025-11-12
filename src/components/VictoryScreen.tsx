@@ -7,7 +7,7 @@ interface VictoryScreenProps {
 
 const VictoryScreen: React.FC<VictoryScreenProps> = ({ onPlayAgain, onBackToMenu }) => {
     return (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center px-4">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center px-4">
             <div className="bg-white/90 backdrop-blur-md rounded-xl shadow-2xl p-8 max-w-md w-full text-center">
                 <h1 className="text-4xl font-bold text-black mb-4">🎉 Grattis! 🎉</h1>
                 <p className="text-xl text-gray-700 mb-8">Du klarade alla 52 kort!</p>
