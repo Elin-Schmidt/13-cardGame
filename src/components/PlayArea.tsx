@@ -13,7 +13,7 @@ const PlayArea: React.FC<PlayAreaProps> = ({ children }) => {
                 style={{ backgroundImage: "linear-gradient(180deg, rgba(0,0,0,0.15), rgba(255,255,255,0.02))" }}
             >
                 {/* inner felt surface - responsive min-height so it fits better on phones */}
-                <div className="rounded-2xl bg-felt p-11 flex items-center justify-center min-h-[14rem]">
+                <div className="rounded-2xl bg-felt py-11 flex items-center justify-center min-h-[14rem]">
                     {children}
                 </div>
             </div>

@@ -10,7 +10,7 @@ const Menu: React.FC<MenuProps> = ({ onSelectMode }) => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen h-full bg-felt text-black p-6 relative">
-            <img src="/logo.svg" alt="Thirteen" className="h-64 w-auto mb-12" draggable={false} />
+            <img src="/logo.svg" alt="Thirteen" className="h-80 w-auto mb-12" draggable={false} />
 
             {/* Question mark icon in top right */}
             <div className="fixed top-4 right-4 z-[100]">

@@ -18,7 +18,7 @@ const Counter: React.FC<CounterProps> = ({ value }) => {
 
     return (
         <div className="mt-4">
-            <div className={`relative inline-flex items-center justify-center bg-white/95 rounded-2xl px-10 py-6 shadow-lg transform transition-all duration-300 min-w-[14rem] border ${isMax ? 'border-yellow-400 ring-2 ring-yellow-300/30' : 'border-gray-200'}`}>
+            <div className={`relative inline-flex items-center justify-center rounded-2xl px-10 py-6 shadow-lg transform transition-all duration-300 min-w-[14rem] border ${isMax ? 'border-yellow-400 ring-2 ring-yellow-300/30' : 'border-gray-200'}`} style={{ backgroundColor: '#ede0cd' }}>
                 {/* decorative suits in each corner (moved slightly outward to give padding) */}
                 <span className="absolute top-3 left-5 text-lg text-gray-700">♠</span>
                 <span className="absolute top-3 right-5 text-lg text-red-400">♥</span>

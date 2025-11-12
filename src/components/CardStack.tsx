@@ -7,9 +7,10 @@ interface CardStackProps {
     setCounterValue: (val: string | number) => void;
     backImage?: string;
     onVictory?: () => void;
+    setCardsRemaining?: (count: number) => void;
 }
 
-const CardStack: React.FC<CardStackProps> = ({ setCounterValue, backImage, onVictory }) => {
+const CardStack: React.FC<CardStackProps> = ({ setCounterValue, backImage, onVictory, setCardsRemaining }) => {
     const [deck, setDeck] = useState<(CardType & { id: number })[]>([]);
     // Each drawn card carries a random angle for a natural pile look
     const [drawnCards, setDrawnCards] = useState<(CardType & { id: number; angle: number })[]>([]);
@@ -20,7 +21,10 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue, backImage, onVic
             id: index,
         }));
         setDeck(newDeck);
-    }, []);
+        if (setCardsRemaining) {
+            setCardsRemaining(52);
+        }
+    }, [setCardsRemaining]);
 
     // (shuffle helper removed — not used currently)
 
@@ -47,6 +51,9 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue, backImage, onVic
                 setDrawnCards([]);
                 setReturnStage('idle');
                 setPendingReturn(false);
+                if (setCardsRemaining) {
+                    setCardsRemaining(mergedUnder.length);
+                }
             }, FLIP_MS + MOVE_MS);
 
             return;
@@ -74,10 +81,16 @@ const CardStack: React.FC<CardStackProps> = ({ setCounterValue, backImage, onVic
                 setDrawnCards(newDrawn);
                 setDeck(newDeck);
                 setPendingReturn(true);
+                if (setCardsRemaining) {
+                    setCardsRemaining(newDeck.length);
+                }
             } else {
                 // normal case: place the card on the table
                 setDrawnCards(newDrawn);
                 setDeck(newDeck);
+                if (setCardsRemaining) {
+                    setCardsRemaining(newDeck.length);
+                }
 
                 // Check if this was the last card and player won (didn't match)
                 if (newDeck.length === 0 && onVictory) {

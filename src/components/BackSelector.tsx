@@ -67,12 +67,12 @@ const BackSelector: React.FC<BackSelectorProps> = ({ selected, setSelected, play
         <>
             {/* Icon button bottom-right; placed absolutely inside PlayArea */}
             <button
-                className="absolute bottom-4 right-4 w-10 h-10 bg-white/90 rounded-full shadow-md flex items-center justify-center z-30 hover:scale-105 transition-transform"
+                className="absolute bottom-4 right-4 w-10 h-10 bg-black/30 backdrop-blur-sm rounded-full shadow-md flex items-center justify-center z-30 hover:scale-105 transition-transform border-2 border-[#F0A543]"
                 onClick={() => setOpen(true)}
                 aria-label="Byt kortbaksida"
             >
-                {/* switch icon from assets */}
-                <img src={switchIcon} alt="Byt baksida" className="w-5 h-5" draggable={false} />
+                {/* switch icon from assets with cream color #ede0cd like the logo */}
+                <img src={switchIcon} alt="Byt baksida" className="w-5 h-5" style={{ filter: 'brightness(0) saturate(100%) invert(95%) sepia(8%) saturate(513%) hue-rotate(338deg) brightness(100%) contrast(91%)' }} draggable={false} />
             </button>
 
             {open && createPortal(
